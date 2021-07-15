@@ -50,13 +50,30 @@ public class FrontControllerServletV3 extends HttpServlet {
         String viewName = modelView.getViewName();// 논리 이름
         MyView view = viewResolver(viewName);
 
-        view.render(modelView.getModel(), request, response);
+        /*
+        V3 버전에서는 V2와 달리 view 자체에 model에 추가된 member 또는 members 데이터를 가지고 있지 않으므로,
+        modelView.getModel()을 통해 파라미터에 넣어준다.
+         */
+        view.render(modelView.getModel(), request, response); // JSP로 포워드 후 렌더링 처리.
     }
 
+    /**
+     * 컨트롤러가 반환한 논리 이름을 실제 물리 뷰 경로로 변경한다.
+     * 그리고 실제 물리 경로가 있는 MyView 객체를 반환한다.
+     *
+     * @param viewName
+     * @return
+     */
     private MyView viewResolver(String viewName) {
         return new MyView("/WEB-INF/views/" + viewName + ".jsp");
     }
 
+    /**
+     * HttpServletRequest에서 파라미터 정보를 꺼내서 Map으로 변환한다.
+     *
+     * @param request
+     * @return
+     */
     private Map<String, String> createParamMap(HttpServletRequest request) {
         // paramMap
         Map<String, String> paramMap = new HashMap<>();
